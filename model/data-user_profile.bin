@@ -1,17 +1,27 @@
 {
-  "Sokunpanha": {
-    "email": "sokunpanha.panha@gmail.com",
-    "password": "Panha@#$",
-    "key": ""
-  },
-  "test": {
-    "email": "bebik13180@dirksop.com",
-    "password": "Marie@@##",
-    "key": ""
-  },
   "Alison": {
     "email": "jack.jack.son88@outlook.com",
     "password": "JackSon@#$",
     "key": "R7A7YQE6G4HWBQ7TTUF4CONRACAIPQHO"
+  },
+  "SokunICT": {
+    "email": "amazing.org.ca@gmail.com",
+    "password": "Panha@#$",
+    "key": "W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"
+  },
+  "JameSmith": {
+    "email": "jack.jack.son96@outlook.com",
+    "password": "JackSon@#$",
+    "key": "Y36C5TCV5XCPYYX2LOHDX6P3YWSYMHHQ\r"
+  },
+  "OliverJonh": {
+    "email": "jack.jack.son98@outlook.com",
+    "password": "JackSon@#$",
+    "key": "WBX4BLYYJGCERM5755VJHOO34XP6HKLE"
+  },
+  "Masa": {
+    "email": "bebik13180@dirksop.com",
+    "password": "Marie@@##",
+    "key": ""
   }
 }

@@ -10,11 +10,15 @@ from utils import WebDriverHelper
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import json
+import threading
 
 class FacebookActions(WebsiteActions):
+    def __init__(self):
+        self.keyboard = Controller()
+        self.lock = threading.Lock()
+
 
     def perform_actions(self, driver, task_info):
-        self.keyboard = Controller()
         self.bot = WebDriverHelper()
         action = task_info.get("action")
         params = task_info.get("params", {})
@@ -103,7 +107,7 @@ class FacebookActions(WebsiteActions):
     def scroll_randomly(self, driver, scrolling=True):
         while scrolling:
             # Randomly determine whether to scroll up, down, or not at all
-            scroll_decision = random.choices(["up", "down", "none"], weights=[0.1, 0.5, 0.4])[0]
+            scroll_decision = random.choices(["up", "down", "none"], weights=[0.2, 0.6, 0.2])[0]
 
             if scroll_decision in ["up", "down"]:
                 # Scroll up or down with a faster speed
@@ -157,36 +161,39 @@ class FacebookActions(WebsiteActions):
             driver = self.close_vpn_page(driver,"https://www.facebook.com")
             driver.implicitly_wait(4)           
             driver.find_element(By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft' and text()='Photo/video']").click()
+           
             driver.implicitly_wait(20)
             paragraph_element = driver.find_element(By.XPATH, "//p[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x16tdsg8']")
             driver.implicitly_wait(20)
     # Input text into the <p> element
-            paragraph_element.send_keys("Your text goes here")
-            driver.implicitly_wait(40)
-            add_photos_videos = driver.find_element(By.XPATH, "//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u' and text()='Add Photos/Videos']")
-            driver.implicitly_wait(40)
-            # add_photos_videos.send_keys(os.getcwd()+"\\image\\pic1.jpg")
-            add_photos_videos.click()
-            time.sleep(2)
-            self.keyboard.type("D:\\facebook\\group-post\\auto_post\\app\\image\\pic2.jpeg")
-            self.keyboard.press(Key.enter)
-            self.keyboard.release(Key.enter)
-            # # Find the <span> element by class name
-            post_button = driver.find_element(By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft' and text()='Post']")
-            driver.implicitly_wait(4)
-            time.sleep(3)
-            # Click the post button
-            post_button.click()
+            paragraph_element.send_keys("Have a good day!")
+            with self.lock:
+                drag_and_drop_element = driver.find_element(By.XPATH, "//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1pg5gke xvq8zen xo1l8bm xi81zsa x2b8uid' and text()='or drag and drop']")
+                driver.implicitly_wait(20)
+                drag_and_drop_element.click()
+                time.sleep(random.uniform(2, 5))
+                self.keyboard.type("D:\\facebook\\group-post\\auto_post\\app\\image\\pic2.jpeg")
+                self.keyboard.press(Key.enter)
+                self.keyboard.release(Key.enter)
+                time.sleep(4)
 
-        
-        
-            # span_element.send_keys(os.getcwd()+"\\image\\pic1.jpg")
-
+        # Find the post_button and perform the action within a lock
+            with self.lock:
+                post_button = driver.find_element(By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft' and (text()='Post' or text()='Next')]")
+                if post_button.text == "Next":
+                    post_button.click()
+                    driver.implicitly_wait(10)
+                    driver.find_element(By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft' and text()='Post']").click()
+                else:
+                    driver.implicitly_wait(10)
+                    time.sleep(3)
+                    post_button.click()
+                # span_element.send_keys(os.getcwd()+"\\image\\pic1.jpg")
             driver.implicitly_wait(10)
             self.scroll_randomly(driver, scrolling=True)
             print("scrolled")
-            # driver.find_element(By.XPATH, "//div[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xk50ysn xzsf02u x1yc453h']/span").click()
-            time.sleep(1000000)
+                # driver.find_element(By.XPATH, "//div[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xk50ysn xzsf02u x1yc453h']/span").click()
+            time.sleep(1000000)    
     # Define the mapping of actions to methods
     actions_mapping = {
         'active': active_on_facebook,
