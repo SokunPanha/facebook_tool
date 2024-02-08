@@ -15,8 +15,6 @@ class WebDriverManager:
         options.add_extension(config.env["vpn"])
         # options.add_experimental_option("useAutomationExtension", False)
         # options.add_experimental_option("excludeSwitches",["enable-automation"])
-
-
         # print(path)
         service = Service(config.env["driver"])  # Path to your chrome profile
         driver = webdriver.Chrome(service=service, options=options)
@@ -32,14 +30,14 @@ class WebDriverManager:
             action = task_info.get("action")
             params = task_info.get("params", {})
             
-            if action == "post_active":
-                # Ensure post_and_active runs sequentially
-                website_actions.post_and_active(driver, params)
-            else:
+            # if action == "post_active":
+            #     # Ensure post_and_active runs sequentially
+            #     website_actions.post_and_active(driver, params)
+            # else:
                 # For other actions, run them concurrently
-                thread = threading.Thread(target=website_actions.perform_actions, args=(driver, task_info))
-                self.threads.append(thread)
-                thread.start()
+            thread = threading.Thread(target=website_actions.perform_actions, args=(driver, task_info))
+            self.threads.append(thread)
+            thread.start()
 
         # Wait for all other threads to finish before quitting the driver
         for thread in self.threads:

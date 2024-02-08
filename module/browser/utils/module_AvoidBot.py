@@ -6,7 +6,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 import random
 import time
 
-
 class WebDriverHelper:
     def wait_for_element(self, driver, by, value, timeout=10):
         return WebDriverWait(driver, timeout).until(EC.presence_of_element_located((by, value)))
