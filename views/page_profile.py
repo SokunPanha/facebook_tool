@@ -15,9 +15,7 @@ def Profile(page:ft.Page, params: Params, basket: Basket ):
         bgcolor=ft.colors.GREY_900,
         elevation= 10,
         actions=[
-              
         ],
-
     ),
     ft.Column(
         controls=[

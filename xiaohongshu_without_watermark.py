@@ -450,20 +450,3 @@
 # # Example usage
 # # video_url = 'http://v.xiaohongshu.com/stream/110/258/01e5b72379a18ff2010377038d53634418_258.mp4?sign=0f8a336011f10f97549ce7a709fe45e6&t=65bbc000'
 # download_video(video_url)
-
-import pyautogui
-import time
-
-# Open File Explorer by pressing the Windows key and typing 'File Explorer'
-pyautogui.hotkey('winleft')
-time.sleep(1)  # Wait for the Start menu to appear
-pyautogui.write('File Explorer')
-pyautogui.press('enter')
-
-# Wait for File Explorer to open
-time.sleep(2)
-
-# Example: Open a specific folder by typing its path
-folder_path = r'C:\Your\Desired\Folder\Path'
-pyautogui.write(folder_path)
-pyautogui.press('enter')

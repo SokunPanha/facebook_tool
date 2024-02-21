@@ -14,7 +14,7 @@ class AppiumDriver:
         ldplayer_path = r'D:\LDPlayer\LDPlayer9\dnplayer.exe'
         command = [ldplayer_path, f'index={ldplayer_index}']
         subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        time.sleep(10)  # 
+        time.sleep(15)  # 
     def close_ldplayer_instance(self):
         command = ['taskkill', '/F', '/IM', 'dnplayer.exe']
         subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -24,13 +24,13 @@ class AppiumDriver:
         for index in user_tasks.keys():
             ldplayer_process = Process(target=self.open_ldplayer_instance, args=(index))
             ldplayer_process.start()
+            time.sleep(10)
+
             for task_info in user_tasks.get(index, []):
-                # action = task_info.get("action")
-                # params = task_info.get("params", {})
-                
-                time.sleep(15)
-                # app_action.perform_actions(task_info)
-       
+                action = task_info.get("action")
+                params = task_info.get("params", {})
+                app_action.perform_actions(task_info)
+            time.sleep(15)
             self.close_ldplayer_instance()
             ldplayer_process.join()
 
@@ -39,17 +39,30 @@ class AppiumDriver:
 
 
 user_tasks = {
-     "0":[
-     {"action": "post_reels", "params": { "num_video": 9 , "description":" Trick in Agriculture!! #agriculture #farmersmarket #farmer #farming #farmlife " ,"email": "jack.jack.son96@outlook.com", "password":"JackSon@#$", "key":"Y36C5TCV5XCPYYX2LOHDX6P3YWSYMHHQ"}},    # "john": {"action": "post", "params": {"username": "https://www.youtube.com/"}},
+    #  "0":[
+    #  {"action": "post_reels", "params": { "num_video": 6, "description":" Trick in Agriculture!! #agriculture #farmersmarket #farmer #farming #farmlife " ,"email": "jack.jack.son98@outlook.comm", "password":"JackSon@#$", "key":"WBX4BLYYJGCERM5755VJHOO34XP6HKLE"}},    # "john": {"action": "post", "params": {"username": "https://www.youtube.com/"}},
+    # ],
+
+    # "1": [
+    #     {"action": "post_reels", "params": {"num_video": 6, "description":" Do you love me! #viralvideo #viralvideo #viralreels #virals #shorts #fyp #fypシviral  #reelsvideo #reels #reelsviral #reelsfb #reels2023 #videoviral #viralpost " ,"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
+    #     # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
+    # ],
+    #   "2": [
+    #     {"action": "post_reels", "params": {"num_video": 1, "description":" It looks so amazing!! #viralvideo #viralvideo #viralreels #virals #shorts #fyp #fypシviral  #reelsvideo #reels #reelsviral #reelsfb #reels2023 #videoviral #viralpost " ,"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
+    #     # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
+    # ],
+    #   "3": [
+    #     {"action": "post_reels", "params": {"num_video": 6, "description":" It is time to collect the harvest!! #harvester1270g #harvester #harvest #harvesting #harvesterlover #woodworking #forestry #forest #made #satisfying #viralvideo #viralvideo #viralreels #virals #shorts #fyp #fypシviral  #reelsvideo #reels #reelsviral #reelsfb #reels2023 #videoviral #viralpost " ,"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
+    #     # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
+    # ],
+      "4": [
+        {"action": "post_reels", "params": {"num_video": 6, "description":" hilarious kid!! #kidsactivities #kids #kidsfashion #kidstoys #kidswear #kidsphotography #cutekidsclub #viralvideo #viralvideo #viralreels #virals #shorts #fyp #fypシviral  #reelsvideo #reels #reelsviral #reelsfb #reels2023 #videoviral #viralpost " ,"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
+        # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
     ],
-    # "0": [
+    # "1": [
     #     {"action": "login_2fa", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
     #     # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
     # ],
-    "1": [
-        {"action": "login_2fa", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$", "key":"W6NG3L7Q3WSIQZQKI7THZ6HTV5J6I3QI"}},
-        # {"action": "login", "params": {"email": "amazing.org.ca@gmail.com", "password":"Panha@#$"}},
-    ],
 }
 
 if __name__ == '__main__':

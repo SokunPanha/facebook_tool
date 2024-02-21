@@ -4,9 +4,9 @@ import requests
 from pynput.keyboard import Key, Controller
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from module_webaction_interface import Action
+from ..module_webaction_interface import Action
 from selenium.webdriver.support import expected_conditions as EC
-from utils import WebDriverHelper, Get2FACode
+from ..utils import WebDriverHelper, Get2FACode
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import json
@@ -21,6 +21,7 @@ class FacebookActions(Action):
 
 
     def perform_actions(self, driver, task_info):
+        print("action")
         action = task_info.get("action")
         params = task_info.get("params", {})
         if action in self.actions_mapping:
@@ -104,9 +105,9 @@ class FacebookActions(Action):
                 break
             except:
                 pass
-    def active_on_facebook(self, driver):
+    def active_on_facebook(self, driver,params):
         # print(driver.current_url)
-           driver = self.close_vpn_page("https://www.facebook.com")
+           driver = self.close_vpn_page(driver,"https://www.facebook.com")
            driver.implicitly_wait(4)           
         # Wait for the initial content to load before starting scrolling
            self.scroll_randomly(driver, scrolling=True)
@@ -125,7 +126,8 @@ class FacebookActions(Action):
     def custom_action(self, driver, params):
         # Add your custom action logic here
         print(f"Executing custom action with parameters: {params}")
-    def post_and_active(self,driver,param):
+    def post_and_active(self,driver,params):
+            print("post_active start")
             driver = self.close_vpn_page(driver,"https://www.facebook.com")
             driver.implicitly_wait(4)           
             driver.find_element(By.XPATH, "//span[@class='x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft' and text()='Photo/video']").click()
@@ -134,13 +136,13 @@ class FacebookActions(Action):
             paragraph_element = driver.find_element(By.XPATH, "//p[@class='xdj266r x11i5rnm xat24cr x1mh8g0r x16tdsg8']")
             driver.implicitly_wait(20)
     # Input text into the <p> element
-            paragraph_element.send_keys("Infinite Love  #jesuschrist #jesuslovesyou #Jesus #jesussaves  ")
+            paragraph_element.send_keys(params['description'])
             with self.lock:
                 drag_and_drop_element = driver.find_element(By.XPATH, "//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x4zkp8e x676frb x1pg5gke xvq8zen xo1l8bm xi81zsa x2b8uid' and text()='or drag and drop']")
                 driver.implicitly_wait(20)
                 drag_and_drop_element.click()
                 time.sleep(random.uniform(2, 5))
-                self.keyboard.type("D:\\facebook\\group-post\\auto_post\\app\\image\\pic1.jpg")
+                self.keyboard.type(params['image'])
                 self.keyboard.press(Key.enter)
                 self.keyboard.release(Key.enter)
                 time.sleep(4)

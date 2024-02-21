@@ -2,7 +2,7 @@ from flet import *
 from api.profile import Profile
 from flet_route import Basket, Params
 class ProfileDataTable(UserControl):
-    def __init__(self,page:Page, params:Params, basket:Basket, route):
+    def __init__(self,page:Page, params:Params, basket:Basket, route="/profile-update"):
         super().__init__()
         self.profile = Profile()
         self.data = self.profile.find_all()

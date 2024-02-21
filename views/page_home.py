@@ -16,7 +16,7 @@ def Home (page:ft.Page, params: Params, basket: Basket ):
                 ft.Row(
                     controls=[
                         Card_Icon(page,ft.icons.PERSON, "Profile", "/profile"),
-                        Card_Icon(page,ft.icons.FACEBOOK_OUTLINED, "Active Ac", "/profile"),
+                        Card_Icon(page,ft.icons.FACEBOOK_OUTLINED, "Active Ac", "/active-account"),
                         Card_Icon(page,ft.icons.GROUP, "Group Post", "/profile"),
         ],
         alignment= ft.MainAxisAlignment.CENTER

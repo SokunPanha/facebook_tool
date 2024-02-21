@@ -259,12 +259,14 @@ import json
 
 class ProfileDataManager:
     def __init__(self):
-        self.file_path = os.path.join(os.getcwd(), "model\\data-user_profile.bin")
-        self.current_key = None
+        self._file_path = os.path.join(os.getcwd(), "model\\data-user_profile.bin")
+        self._current_key = None
+        self._existing_data = self.read_data()
+        self._user_tasks = {}
 
     def read_data(self):
         try:
-            with open(self.file_path, 'rb') as binary_file:
+            with open(self._file_path, 'rb') as binary_file:
                 data_bytes = binary_file.read()
                 if data_bytes:
                     data_str = data_bytes.decode()
@@ -277,12 +279,12 @@ class ProfileDataManager:
             return {}
 
     def write_data(self, data):
-        with open(self.file_path, 'wb') as binary_file:
+        with open(self._file_path, 'wb') as binary_file:
             json_string = json.dumps(data, indent=2)
             binary_file.write(json_string.encode())
 
     def set_current_key(self, key):
-        self.current_key = key
+        self._current_key = key
 
     def create_profile(self, profile_name, email, password, key):
         existing_data = self.read_data()
@@ -301,7 +303,7 @@ class ProfileDataManager:
 
 
     def set_current_key(self, key):
-        self.current_key = key
+        self._current_key = key
 
     def create_profile(self, profile_name, email, password, key):
         existing_data = self.read_data()
@@ -322,7 +324,7 @@ class ProfileDataManager:
         existing_data = self.read_data()
 
         if profile_name is None:
-            profile_name = self.current_key
+            profile_name = self._current_key
 
         return existing_data.get(profile_name, None)
 
@@ -351,7 +353,7 @@ class ProfileDataManager:
         existing_data = self.read_data()
 
         if profile_name is None:
-            profile_name = self.current_key
+            profile_name = self._current_key
 
         if profile_name in existing_data:
             del existing_data[profile_name]
@@ -362,10 +364,24 @@ class ProfileDataManager:
             print(f"Profile '{profile_name}' does not exist.")
 
     def get_all_profiles(self):
-        existing_data = self.read_data()
-        return existing_data
+        return self._existing_data
+    
+    def get_all_profiles_name(self):
+        return list(self._existing_data.keys())
+        
+    def initial_task(self, tasks):
+        for profile in self.get_all_profiles_name():
+            self._user_tasks[profile] = tasks
+        return self._user_tasks
 
     def delete_all_profiles(self):
         self.write_data({})
         print("All profiles deleted successfully.")
+
+# web = ProfileDataManager()
+
+# re = web.initial_task([{"action":"da"}])
+# print(re)
+
+
 

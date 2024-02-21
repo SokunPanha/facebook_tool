@@ -32,19 +32,19 @@ class LDPlayerActions(Action):
       
       def coor_click(self,num_video):
             
-            table = 9
+            table = num_video
             row = range(0, math.ceil(num_video / 3))
             col =range(0,3)
             # print(row)
             coord = []
             n = 0
             for i in row:
-                x = 200
-                y = 600 + i * 300
+                x = 100
+                y = 400 + i * 200
                 for j in col: 
                     n  = n+1
                     if n<=table:
-                        x = x + j*150
+                        x = x + j*100
                         print(f'{n}ROW {i}{x,y}')
                         coord.append({"x":x, "y":y})
             return coord
@@ -62,6 +62,7 @@ class LDPlayerActions(Action):
       def reel_post(self,params):
            driver = self.initialize_appium_server()
            driver.implicitly_wait(20)
+        #    time.sleep(10)
            open_facebook = driver.find_element(by=AppiumBy.XPATH, value="//android.widget.TextView[@content-desc='Facebook']")
            open_facebook.click()
            try:
@@ -76,11 +77,11 @@ class LDPlayerActions(Action):
                     driver.implicitly_wait(10)
                     reels_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.GridView/android.view.ViewGroup[2]/android.view.ViewGroup[1]")
                     self.human_clicking(driver, reels_btn)
-                    driver.implicitly_wait(10)
+                    driver.implicitly_wait(10)    
                     # time.sleep(1000)
                     driver.tap([(coord["x"], coord["y"])])
                     driver.implicitly_wait(10)
-                    next_button = driver.find_element(AppiumBy.XPATH, "//android.view.ViewGroup[@content-desc='Next']")
+                    next_button = driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@resource-id='com.facebook.katana:id/(name removed)' and @text='Next'] | //android.view.ViewGroup[@content-desc='Next']")
                     time.sleep(2)
                     self.human_clicking(driver, next_button)
                     description = driver.find_element(AppiumBy.XPATH, "//android.widget.EditText[@text='Describe your reel. You can also add hashtags here…']")
@@ -94,6 +95,7 @@ class LDPlayerActions(Action):
 
            except:
                 print("error")
+                print(f"{params['description']}")
                 
            
       def login_2fa(self, params):
@@ -103,61 +105,68 @@ class LDPlayerActions(Action):
                 driver.implicitly_wait(20)
                 open_facebook = driver.find_element(by=AppiumBy.XPATH, value="//android.widget.TextView[@content-desc='Facebook']")
                 open_facebook.click()
+                try:
+                    login_other = driver.find_element(AppiumBy.XPATH, "//android.view.View[@content-desc='Log into another account']")
+                    # Element found, do something
+                    login_other.click()  # For example, click on the element
+                except:
+                    # Element not found, do something else
+                    print("Element not found, performing alternative action")
+                finally:
+                    driver.implicitly_wait(10)
+                    email_box = driver.find_element(AppiumBy.XPATH, "//android.view.View[@content-desc='Mobile number or email']")
+                    self.human_clicking(driver,email_box)
 
-            #     driver.implicitly_wait(10)
-            #     email_box = driver.find_element(AppiumBy.XPATH, "//android.view.View[@content-desc='Mobile number or email']")
-            #     self.human_clicking(driver,email_box)
+                    driver.implicitly_wait(10)
+                    email = driver.find_element(AppiumBy.XPATH, "(//android.widget.FrameLayout[@resource-id='com.facebook.katana:id/(name removed)'])[2]/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout[1]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText")
+                    email.send_keys(params["email"])
 
-            #     driver.implicitly_wait(10)
-            #     email = driver.find_element(AppiumBy.XPATH, "(//android.widget.FrameLayout[@resource-id='com.facebook.katana:id/(name removed)'])[2]/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout[1]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText")
-            #     email.send_keys(params["email"])
+                    pass_box = driver.find_element(AppiumBy.XPATH, "//android.view.View[@content-desc='Password']")
+                    self.human_clicking(driver,pass_box)
 
-            #     pass_box = driver.find_element(AppiumBy.XPATH, "//android.view.View[@content-desc='Password']")
-            #     self.human_clicking(driver,pass_box)
+                    password = driver.find_element(AppiumBy.XPATH, "(//android.widget.FrameLayout[@resource-id='com.facebook.katana:id/(name removed)'])[2]/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout[1]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText")
+                    password.send_keys(params["password"])
 
-            #     password = driver.find_element(AppiumBy.XPATH, "(//android.widget.FrameLayout[@resource-id='com.facebook.katana:id/(name removed)'])[2]/android.widget.FrameLayout/android.widget.FrameLayout[2]/android.widget.FrameLayout[1]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[3]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText")
-            #     password.send_keys(params["password"])
+                    login_button = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Log in']/android.view.ViewGroup")
+                    self.human_clicking(driver, login_button)
 
-            #     login_button = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Log in']/android.view.ViewGroup")
-            #     self.human_clicking(driver, login_button)
+                #     new page 
+                    driver.implicitly_wait(10)
+                    tryanother_way = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Try another way']/android.view.ViewGroup")
+                    self.human_clicking(driver, tryanother_way)
 
-            # #     new page 
-            #     driver.implicitly_wait(10)
-            #     tryanother_way = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Try another way']/android.view.ViewGroup")
-            #     self.human_clicking(driver, tryanother_way)
+                #     new page 
+                    driver.implicitly_wait(10)
+                    auth_button = driver.find_element(AppiumBy.XPATH, "//android.widget.RadioButton[@content-desc='Authentication app, Get a code from the app you set up.']")
+                    self.human_clicking(driver, auth_button)
 
-            # #     new page 
-            #     driver.implicitly_wait(10)
-            #     auth_button = driver.find_element(AppiumBy.XPATH, "//android.widget.RadioButton[@content-desc='Authentication app, Get a code from the app you set up.']")
-            #     self.human_clicking(driver, auth_button)
-
-            #     auth_next_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
-            #     self.human_clicking(driver, auth_next_btn)
-
-
-            #     #new 
-            #     driver.implicitly_wait(10)
-            #     code = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
-            #     self.human_clicking(driver, code)
-
-            #     code_input = driver.find_element(AppiumBy.XPATH, "//android.widget.EditText")
-            #     code_input.send_keys(key)
-
-            #     code_next = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
-            #     self.human_clicking(driver, code_next)
+                    auth_next_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
+                    self.human_clicking(driver, auth_next_btn)
 
 
-            # #     new page 
-            #     driver.implicitly_wait(10)
-            #     save_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Save']/android.view.ViewGroup")
-            #     self.human_clicking(driver, save_btn)
-                time.sleep(300)
-            #     new page 
-                skip = driver.find_element(AppiumBy.XPATH, "//android.view.View[@text='Skip']")
-                self.human_clicking(driver, skip)
-                # Your additional actions can be added here
+                    #new 
+                    driver.implicitly_wait(10)
+                    code = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
+                    self.human_clicking(driver, code)
 
-                time.sleep(1000)  # Example wait time, replace with your logic
+                    code_input = driver.find_element(AppiumBy.XPATH, "//android.widget.EditText")
+                    code_input.send_keys(key)
+
+                    code_next = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Continue']/android.view.ViewGroup")
+                    self.human_clicking(driver, code_next)
+
+
+                #     new page 
+                    driver.implicitly_wait(10)
+                    save_btn = driver.find_element(AppiumBy.XPATH, "//android.widget.Button[@content-desc='Save']/android.view.ViewGroup")
+                    self.human_clicking(driver, save_btn)
+                    driver.implicitly_wait(10)
+                #     new page 
+                    skip = driver.find_element(AppiumBy.XPATH, "//android.view.View[@text='Skip']")
+                    self.human_clicking(driver, skip)
+                    # Your additional actions can be added here
+
+                    time.sleep(5)  # Example wait time, replace with your logic
             except Exception as msg:
                   print(msg)
            
